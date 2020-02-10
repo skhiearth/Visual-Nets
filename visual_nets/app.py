@@ -26,7 +26,7 @@ class Application(tk.Tk):
         filemenu = tk.Menu(MainMenu)
         helpmenu = tk.Menu(MainMenu)
 
-        filemenu.add_command(label='New')
+        filemenu.add_command(label='New', command=self.switch_frame(StartPage))
         filemenu.add_command(label='Open')
         filemenu.add_separator()
         filemenu.add_command(label='Exit', command=self.quit)
