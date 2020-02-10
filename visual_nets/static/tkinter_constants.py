@@ -1,0 +1,2 @@
+TOP_TITLE = 'Visual Nets'
+TOP_GEOMETRY = "256x160"
