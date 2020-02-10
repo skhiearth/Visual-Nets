@@ -1,6 +1,5 @@
 import tkinter as tk
 from visual_nets.source.root import SequentialModel
-from visual_nets.static.tkinter_constants import *
 
 model = SequentialModel()
 
@@ -27,15 +26,3 @@ class ModelPage(tk.Frame):
 
 from visual_nets.gui.loaddata import DataPage
 from visual_nets.gui.startpage import StartPage
-'''
-class Applicataion(tkinter.Frame):
-    def __init__(self, master=None):
-        tkinter.Frame.__init__(self, master)
-        self.master = master
-        self.master.title(TOP_TITLE)
-        self.master.geometry(TOP_GEOMETRY)
-        self.create_wgts()
-        self.addButtons()
-'''
-
-

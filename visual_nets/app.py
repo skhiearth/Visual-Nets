@@ -1,5 +1,6 @@
 import tkinter as tk
 from visual_nets.gui.startpage import StartPage
+from visual_nets.static.tkinter_constants import *
 
 
 class Application(tk.Tk):
@@ -7,6 +8,8 @@ class Application(tk.Tk):
         tk.Tk.__init__(self)
         self._frame = None
         self.switch_frame(StartPage)
+        self.title(TOP_TITLE)
+        self.geometry(TOP_GEOMETRY)
         self.create_widgets()
 
     def switch_frame(self, frame_class):
