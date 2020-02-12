@@ -5,11 +5,15 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from pandastable import Table
 from tkinter import filedialog
+from visual_nets.static.tkinter_constants import *
 
 
 class DataPage(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
+
+        self.scalingType = tk.IntVar()
+        self.scalingType.set(0)  # No Scaling
 
         self.create_frames()
         self.create_widgets()
@@ -25,12 +29,27 @@ class DataPage(tk.Frame):
         self.leftFrame.pack(side=tk.LEFT, fill="both", expand=True)
 
         self.rightFrame = tk.Frame(self, padx=10, pady=10, bg="green", width=350)
-        self.rightFrame.pack(side=tk.RIGHT, fill="both", expand=True)
+        self.rightFrame.pack(side=tk.RIGHT, fill="both", expand=False)
 
-        self.tableFrame = tk.Frame(self.rightFrame, height=250)
+        self.tableFrame = tk.Frame(self.rightFrame, height=250, padx=10, pady=10)
         self.tableFrame.pack(side=tk.BOTTOM, expand=False, fill="x")
 
+        self.tableContainerFrame = tk.Frame(self.tableFrame, height=200)
+        self.tableContainerFrame.pack(side=tk.BOTTOM, expand=False, fill="x")
+
     def create_widgets(self):
+        tk.Label(self.tableFrame, text='Feature Scaling: ',
+                 font=('Helvetica', 11)).pack(side="left")
+
+        for val, ty in enumerate(SCALING_TYPES):
+            tk.Radiobutton(self.tableFrame,
+                           text=ty,
+                           font=('Helvetica', 11),
+                           padx=8,
+                           command=self.scaleData,
+                           variable=self.scalingType,
+                           value=val).pack(side="left")
+
         tk.Label(self.topFrame, text="Data Page", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         tk.Button(self.bottomFrame, text="Start Page",
                   command=lambda: self.master.switch_frame(StartPage)).pack(fill="x")
@@ -44,19 +63,26 @@ class DataPage(tk.Frame):
         '''
 
     def loadData(self):
-        filepath = filedialog.askopenfilename(initialdir="/", title="Select data file",
-                                              filetypes=("CSV Files", "*.csv"))
-        self.df = pd.read_csv(filepath)
-        self.dfValues = self.df.values
+        filepath = filedialog.askopenfilename(initialdir="/",
+                                              title="Select data file",
+                                              filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
+        self.originalDf = pd.read_csv(filepath)
+        self.dfValues = self.originalDf.values
+        self.splitData(values=self.dfValues)
+        self.showTable(data=self.originalDf)
+
+    def scaleData(self):
+        print(self.scalingType.get())
+
+    def splitData(self, values):
         X, y = self.dfValues[:, 0:4], self.dfValues[:, 4]
         tk.Button(self, text="Split Data",
                   command=lambda: self.train_test_split(values=X,
                                                         targets=y,
                                                         test_ratio=0.1)).pack()
-        self.showTable(data=self.df)
 
     def showTable(self, data):
-        pt = Table(self.tableFrame, dataframe=data, showstatusbar=True).show()
+        pt = Table(self.tableContainerFrame, dataframe=data, showstatusbar=True).show()
 
     def train_test_split(self, values, targets, test_ratio, random_state=10):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(values, targets,
