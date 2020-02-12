@@ -17,7 +17,7 @@ class Application(tk.Tk):
         if self._frame is not None:
             self._frame.destroy()
         self._frame = new_frame
-        self._frame.pack()
+        self._frame.pack(fill="both", expand=True)
 
     def create_widgets(self):
         MainMenu = tk.Menu(self.master)
