@@ -12,18 +12,7 @@ class DataPage(tk.Frame):
         tk.Frame.__init__(self, master)
 
         self.create_frames()
-
-        tk.Label(self.topFrame, text="Data Page", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
-        tk.Button(self.bottomFrame, text="Start Page",
-                  command=lambda: master.switch_frame(StartPage)).pack(fill="x")
-        tk.Button(self.rightFrame, text="Load Data",
-                  command=lambda: self.loadData()).pack()
-        tk.Button(self.leftFrame, text="test",
-                  command=lambda: self.loadData()).pack()
-        '''
-        tk.Button(self.topFrame, text="Create Model",
-                  #command=lambda: master.switch_frame(ModelPage)).pack()
-        '''
+        self.create_widgets()
 
     def create_frames(self):
         self.topFrame = tk.Frame(self, padx=10, pady=10, bg="blue")
@@ -41,9 +30,22 @@ class DataPage(tk.Frame):
         self.tableFrame = tk.Frame(self.rightFrame, height=250)
         self.tableFrame.pack(side=tk.BOTTOM, expand=False, fill="x")
 
+    def create_widgets(self):
+        tk.Label(self.topFrame, text="Data Page", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
+        tk.Button(self.bottomFrame, text="Start Page",
+                  command=lambda: self.master.switch_frame(StartPage)).pack(fill="x")
+        tk.Button(self.rightFrame, text="Load Data",
+                  command=lambda: self.loadData()).pack()
+        tk.Button(self.leftFrame, text="test",
+                  command=lambda: self.loadData()).pack()
+        '''
+        tk.Button(self.topFrame, text="Create Model",
+                  #command=lambda: master.switch_frame(ModelPage)).pack()
+        '''
+
     def loadData(self):
         filepath = filedialog.askopenfilename(initialdir="/", title="Select data file",
-                                              filetypes=(("CSV Files", "*.csv"), ("all files", "*.*")))
+                                              filetypes=("CSV Files", "*.csv"))
         self.df = pd.read_csv(filepath)
         self.dfValues = self.df.values
         X, y = self.dfValues[:, 0:4], self.dfValues[:, 4]
